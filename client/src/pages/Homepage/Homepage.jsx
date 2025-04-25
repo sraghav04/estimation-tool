@@ -17,7 +17,7 @@ const Homepage = () => {
       <Header toggleSidebar={toggleSidebar} />
       {/* <Upload /> */}
       <Chat />
-      <Sidebar isOpen={isSidebarOpen} />
+      {/* <Sidebar isOpen={isSidebarOpen} /> */}
       <div
         className="main-content"
         style={{
