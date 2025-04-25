@@ -18,7 +18,7 @@ const Header = ({ toggleSidebar }) => {
       <Dropdown overlay={menu} trigger={["click"]}>
         <FaBars className="hamburger-icon" />
       </Dropdown>
-      <div className="header-title">My Application</div>
+      <div className="header-title">Estimation Tool</div>
       <FaUserCircle className="user-icon" />
     </div>
   );

@@ -6,17 +6,19 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
   return (
     <div className={`sidebar ${isOpen ? "open" : "closed"}`}>
       <div className="sidebar-buttons">
+        <Link to="/features">
+          <Button type="primary" block>
+            Features Implementation
+          </Button>
+        </Link>
         <Button type="primary" block>
-          <Link to="/page1">Features Implementation</Link>
+          <Link to="/test">Test Engineering</Link>
         </Button>
         <Button type="primary" block>
-          <Link to="/page2">Test Engineering</Link>
+          <Link to="/require">Requirement Gathering</Link>
         </Button>
         <Button type="primary" block>
-          <Link to="/page3">Requirement Gathering</Link>
-        </Button>
-        <Button type="primary" block>
-          <Link to="/page3">Additional Development</Link>
+          <Link to="/dev">Additional Development</Link>
         </Button>
       </div>
       <div className="sidebar-result-btn">
