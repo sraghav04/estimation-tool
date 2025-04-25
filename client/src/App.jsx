@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import Homepage from "./pages/Homepage/Homepage";
 import Features from "./pages/Features/Features";
+import Result  from "./pages/Result/Result";
 import Test from "./pages/Test/Test";
 import Requirement from "./pages/Requirement/Requirement";
 import Development from "./pages/Development/Development";
@@ -13,6 +14,7 @@ const App = () => {
         <Route path="test" element={<Test />} />
         <Route path="require" element={<Requirement />} />
         <Route path="dev" element={<Development />} />
+        <Route path="results" element={<Result />} />
         <Route
           index
           element={<div>Welcome! Select a page from Sidebar.</div>}

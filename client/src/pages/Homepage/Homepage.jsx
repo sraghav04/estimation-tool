@@ -1,9 +1,9 @@
 import { Outlet } from "react-router-dom";
 import { useState } from "react";
 import Header from "../../components/Header/Header.jsx";
-// import Upload from "../../components/Upload/Upload.jsx";
+ import Upload from "../../components/Upload/Upload.jsx";
 import Chat from "../../components/Chat/Chat.jsx";
-// import Sidebar from "../../components/Sidebar/Sidebar.jsx";
+ import Sidebar from "../../components/Sidebar/Sidebar.jsx";
 
 const Homepage = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);

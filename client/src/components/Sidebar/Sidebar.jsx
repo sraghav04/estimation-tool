@@ -22,9 +22,12 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
         </Button>
       </div>
       <div className="sidebar-result-btn">
+        <Link to="/results">
         <Button type="dashed" block>
+          
           Result
         </Button>
+        </Link>
       </div>
       <button className="sidebar-toggle-btn" onClick={toggleSidebar}>
         {isOpen ? "<" : ">"}
