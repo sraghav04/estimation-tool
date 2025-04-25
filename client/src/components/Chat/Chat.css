@@ -1,0 +1,40 @@
+.Chatbot {
+  text-align: center;
+  padding: 2rem;
+  font-family: sans-serif;
+}
+
+.chat-box {
+  border: 1px solid #ccc;
+  height: 300px;
+  width: 60%;
+  margin: 0 auto 1rem;
+  overflow-y: scroll;
+  padding: 1rem;
+  background: #f9f9f9;
+}
+
+.user {
+  text-align: right;
+  margin: 5px;
+}
+
+.bot {
+  text-align: left;
+  margin: 5px;
+}
+
+.input-box {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+input {
+  width: 300px;
+  padding: 10px;
+}
+
+button {
+  padding: 10px 20px;
+}

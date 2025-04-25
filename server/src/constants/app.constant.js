@@ -1,0 +1,201 @@
+/* The above code is defining app constants for trigger management. */
+/* Defining the cycle types. */
+const CYCLE_TYPES = ['On-Cycle', 'Off-Cycle'];
+/* Defining the status of the simulation. */
+const SIMULATION_STATUS = {
+  Requested: 'Requested',
+  In_Progress: 'In_Progress',
+  Failed: 'Failed',
+  Success: 'Success',
+  Cancelled: 'Cancelled',
+};
+const USER_FEEDBACK_STATUS = {
+  Requested: 'Requested',
+  In_Progress: 'In_Progress',
+  Failed: 'Failed',
+  Success: 'Success',
+};
+/* This is defining the bin size and range for the trigger analysis. */
+const TRIGGER_ANALYSIS_PER_TRIGGER_BIN_SIZE = 3;
+const TRIGGER_ANALYSIS_PER_TERRITORY_BIN_SIZE = 10;
+const TRIGGER_ANALYSIS_PER_TERRITORY_RANGE = {
+  min: 80,
+  max: 150,
+};
+/* Defining the type of trigger analysis. */
+const TRIGGER_ANALYSIS_TYPE = {
+  production: 'production',
+  simulation: 'simulation',
+};
+
+const TRIGGER_METADATA_MIN_VOLUME = 0;
+const TRIGGER_METADATA_MAX_VOLUME = 1000000;
+const PERCENT_MULTIPLIER = 100;
+const DEFAULT_PAGE_SIZE = 50;
+const DEFAULT_DE_TIMEOUT_IN_MINS = '45';
+const BEARER_TOKEN_TYPE = 'Bearer';
+
+/*Download Templet on Publish Trigger Upload */
+const PUBLISH_COLUMN_NAME = [
+  {
+    OWNER_ID: "",
+    ACCOUNT_PRIORITY_SCORE: 85,
+    ACCOUNT: 6434316,
+    CALL_OBJECTIVE_CLM_ID: "C1",
+    CALL_OBJECTIVE_FROM_DATE: "05/29/2023",
+    CALL_OBJECTIVE_ON_BY_DEFAULT: false,
+    CALL_OBJECTIVE_RECORD_TYPE: "Suggestion_vod",
+    CALL_OBJECTIVE_TO_DATE: "07/02/2023",
+    DISPLAY_DISMISS: true,
+    DISPLAY_MARK_AS_COMPLETE: true,
+    DISPLAY_SCORE: true,
+    EMAIL_TEMPLATE_ID: true,
+    EMAIL_TEMPLATE_VAULT_ID: "TM - Hartford, CT",
+    EXPIRATION_DATE: "07/02/2023",
+    NO_HOMEPAGE: false,
+    PLANNED_CALL_DATE: "",
+    POSTED_DATE: "05/29/2023",
+    PRIORITY: "Normal_vod",
+    REASON: "Reason1",
+    RECORD_TYPE_NAME: "Call_vod",
+    SUGGESTION_EXTERNAL_ID: "04142023Tyvaso_Solution6434316002",
+    SUPPRESS_REASON: false,
+    TITLE: "Trigger_1",
+    SURVEY_ID: "a306f0000076rRA",
+    GROUP_TO_SHARE: "",
+    PRODUCT: ""
+  },
+  {
+    OWNER_ID: "",
+    ACCOUNT_PRIORITY_SCORE: 85,
+    ACCOUNT: 22328018,
+    CALL_OBJECTIVE_CLM_ID: "C2",
+    CALL_OBJECTIVE_FROM_DATE: "05/29/2023",
+    CALL_OBJECTIVE_ON_BY_DEFAULT: false,
+    CALL_OBJECTIVE_RECORD_TYPE: "Suggestion_vod",
+    CALL_OBJECTIVE_TO_DATE: "07/02/2023",
+    DISPLAY_DISMISS: true,
+    DISPLAY_MARK_AS_COMPLETE: true,
+    DISPLAY_SCORE: true,
+    EMAIL_TEMPLATE_ID: true,
+    EMAIL_TEMPLATE_VAULT_ID: "TM - Phoenix NW, AZ",
+    EXPIRATION_DATE: "07/02/2023",
+    NO_HOMEPAGE: false,
+    PLANNED_CALL_DATE: "",
+    POSTED_DATE: "05/29/2023",
+    PRIORITY: "Normal_vod",
+    REASON: "Reason2",
+    RECORD_TYPE_NAME: "Call_vod",
+    SUGGESTION_EXTERNAL_ID: "04142023Tyvaso_DPI22328018009",
+    SUPPRESS_REASON: false,
+    TITLE: "Trigger_1",
+    SURVEY_ID: "a306f0000076rRA",
+    GROUP_TO_SHARE: "",
+    PRODUCT: ""
+  },
+  {
+    OWNER_ID: "",
+    ACCOUNT_PRIORITY_SCORE: 85,
+    ACCOUNT: 36352072,
+    CALL_OBJECTIVE_CLM_ID: "C3",
+    CALL_OBJECTIVE_FROM_DATE: "05/29/2023",
+    CALL_OBJECTIVE_ON_BY_DEFAULT: false,
+    CALL_OBJECTIVE_RECORD_TYPE: "Suggestion_vod",
+    CALL_OBJECTIVE_TO_DATE: "07/02/2023",
+    DISPLAY_DISMISS: true,
+    DISPLAY_MARK_AS_COMPLETE: true,
+    DISPLAY_SCORE: true,
+    EMAIL_TEMPLATE_ID: true,
+    EMAIL_TEMPLATE_VAULT_ID: "TM - Saint Louis, MO",
+    EXPIRATION_DATE: "07/02/2023",
+    NO_HOMEPAGE: false,
+    PLANNED_CALL_DATE: "",
+    POSTED_DATE: "05/29/2023",
+    PRIORITY: "Normal_vod",
+    REASON: "Reason1",
+    RECORD_TYPE_NAME: "Call_vod",
+    SUGGESTION_EXTERNAL_ID: "04142023Orenitram36352072014",
+    SUPPRESS_REASON: false,
+    TITLE: "Trigger_1",
+    SURVEY_ID: "a306f0000076rRA",
+    GROUP_TO_SHARE: "",
+    PRODUCT: ""
+  },
+  {
+    OWNER_ID: "",
+    ACCOUNT_PRIORITY_SCORE: 85,
+    ACCOUNT: 12870962,
+    CALL_OBJECTIVE_CLM_ID: "C4",
+    CALL_OBJECTIVE_FROM_DATE: "05/29/2023",
+    CALL_OBJECTIVE_ON_BY_DEFAULT: false,
+    CALL_OBJECTIVE_RECORD_TYPE: "Suggestion_vod",
+    CALL_OBJECTIVE_TO_DATE: "07/02/2023",
+    DISPLAY_DISMISS: true,
+    DISPLAY_MARK_AS_COMPLETE: true,
+    DISPLAY_SCORE: true,
+    EMAIL_TEMPLATE_ID: true,
+    EMAIL_TEMPLATE_VAULT_ID: "TM - Atlanta N, GA",
+    EXPIRATION_DATE: "07/02/2023",
+    NO_HOMEPAGE: false,
+    PLANNED_CALL_DATE: "",
+    POSTED_DATE: "05/29/2023",
+    PRIORITY: "Normal_vod",
+    REASON: "Reason2",
+    RECORD_TYPE_NAME: "Call_vod",
+    SUGGESTION_EXTERNAL_ID: "04142023Tyvaso_DPI12870962003",
+    SUPPRESS_REASON: false,
+    TITLE: "Trigger_1",
+    SURVEY_ID: "a306f0000076rRA",
+    GROUP_TO_SHARE: "",
+    PRODUCT: ""
+  },
+  {
+    OWNER_ID: "",
+    ACCOUNT_PRIORITY_SCORE: 85,
+    ACCOUNT: 48959565,
+    CALL_OBJECTIVE_CLM_ID: "C5",
+    CALL_OBJECTIVE_FROM_DATE: "05/29/2023",
+    CALL_OBJECTIVE_ON_BY_DEFAULT: false,
+    CALL_OBJECTIVE_RECORD_TYPE: "Suggestion_vod",
+    CALL_OBJECTIVE_TO_DATE: "07/02/2023",
+    DISPLAY_DISMISS: true,
+    DISPLAY_MARK_AS_COMPLETE: true,
+    DISPLAY_SCORE: true,
+    EMAIL_TEMPLATE_ID: true,
+    EMAIL_TEMPLATE_VAULT_ID: "TM - Manhattan, NY",
+    EXPIRATION_DATE: "07/02/2023",
+    NO_HOMEPAGE: false,
+    PLANNED_CALL_DATE: "",
+    POSTED_DATE: "05/29/2023",
+    PRIORITY: "Normal_vod",
+    REASON: "Reason2",
+    RECORD_TYPE_NAME: "Call_vod",
+    SUGGESTION_EXTERNAL_ID: "04142023Tyvaso_DPI48959565011",
+    SUPPRESS_REASON: false,
+    TITLE: "Trigger_1",
+    SURVEY_ID: "a306f0000076rRA",
+    GROUP_TO_SHARE: "",
+    PRODUCT: ""
+  }
+];
+const PUBLISH_LIST_FILE_TYPES = ['text/csv'];
+const PUBLISH_UPLOAD_TEMPLATE = 'upload_publish_template.csv';
+
+module.exports = {
+  CYCLE_TYPES,
+  SIMULATION_STATUS,
+  USER_FEEDBACK_STATUS,
+  TRIGGER_ANALYSIS_PER_TRIGGER_BIN_SIZE,
+  TRIGGER_ANALYSIS_PER_TERRITORY_BIN_SIZE,
+  TRIGGER_ANALYSIS_TYPE,
+  TRIGGER_ANALYSIS_PER_TERRITORY_RANGE,
+  TRIGGER_METADATA_MIN_VOLUME,
+  TRIGGER_METADATA_MAX_VOLUME,
+  PERCENT_MULTIPLIER,
+  DEFAULT_PAGE_SIZE,
+  DEFAULT_DE_TIMEOUT_IN_MINS,
+  BEARER_TOKEN_TYPE,
+  PUBLISH_COLUMN_NAME,
+  PUBLISH_LIST_FILE_TYPES,
+  PUBLISH_UPLOAD_TEMPLATE
+};
