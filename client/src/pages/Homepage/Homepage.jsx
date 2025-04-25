@@ -13,13 +13,14 @@ const Homepage = () => {
   return (
     <>
       <Header toggleSidebar={toggleSidebar} />
-      <Sidebar isOpen={isSidebarOpen} />
+      <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
       <div
         className="main-content"
         style={{
           marginLeft: isSidebarOpen ? 200 : 0,
           marginTop: 60,
           padding: 20,
+          transition: "margin-left 0.3s ease",
         }}
       >
         <Outlet />
