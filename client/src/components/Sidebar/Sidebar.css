@@ -1,0 +1,27 @@
+.sidebar {
+  background-color: #f0f2f5;
+  width: 200px;
+  height: calc(100vh - 60px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.3s ease;
+  position: fixed;
+  top: 60px;
+  left: 0;
+}
+
+.sidebar.closed {
+  transform: translateX(-100%);
+}
+
+.sidebar-buttons {
+  padding: 20px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.sidebar-result-btn {
+  padding: 20px 10px;
+}
