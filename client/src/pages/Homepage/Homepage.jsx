@@ -1,15 +1,34 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Header from "../../components/Header/Header.jsx";
 // import Upload from "../../components/Upload/Upload.jsx";
 import Chat from "../../components/Chat/Chat.jsx";
-// import Sidebar from "../../components/Sidebar/Sidebar.jsx";
+import Sidebar from "../../components/Sidebar/Sidebar.jsx";
+import { Tabs } from "antd";
+import TabPane from "antd/es/tabs/TabPane.js";
 
 const Homepage = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
+  };
+
+  const tabItems = [
+    { key: "/features", label: "Features Implementation" },
+    { key: "/test", label: "Test Engineering" },
+    { key: "/require", label: "Requirement Gathering" },
+    { key: "/dev", label: "Additional Development" },
+  ];
+
+  const activeKey =
+    tabItems.find((tab) => location.pathname.startsWith(tab.key))?.key ||
+    "/features";
+
+  const onTabChange = (key) => {
+    navigate(key);
   };
 
   return (
@@ -20,11 +39,18 @@ const Homepage = () => {
         className="main-content"
         style={{
           marginLeft: isSidebarOpen ? 200 : 0,
-          marginTop: 60,
-          padding: 20,
+
+          padding: 10,
           transition: "margin-left 0.3s ease",
         }}
       >
+        {/* Tabs Below Header */}
+        <Tabs activeKey={activeKey} onChange={onTabChange}>
+          {tabItems.map((tab) => (
+            <TabPane tab={tab.label} key={tab.key} />
+          ))}
+        </Tabs>
+
         <Outlet />
       </div>
     </>

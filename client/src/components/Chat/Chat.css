@@ -1,40 +1,41 @@
 .Chatbot {
-  text-align: center;
-  padding: 2rem;
-  font-family: sans-serif;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 10px;
+  background-color: #fff;
 }
 
 .chat-box {
-  border: 1px solid #ccc;
-  height: 300px;
-  width: 60%;
-  margin: 0 auto 1rem;
-  overflow-y: scroll;
-  padding: 1rem;
-  background: #f9f9f9;
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 10px;
+}
+
+.message {
+  margin: 5px 0;
 }
 
 .user {
   text-align: right;
-  margin: 5px;
+  color: #1890ff;
 }
 
 .bot {
   text-align: left;
-  margin: 5px;
+  color: #52c41a;
 }
 
 .input-box {
   display: flex;
-  justify-content: center;
-  gap: 10px;
+  gap: 5px;
 }
 
-input {
-  width: 300px;
-  padding: 10px;
+.input-box input {
+  flex: 1;
+  padding: 5px;
 }
 
-button {
-  padding: 10px 20px;
+.input-box button {
+  padding: 5px 10px;
 }
