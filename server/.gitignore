@@ -1,0 +1,10 @@
+node_modules
+*.env
+*logs
+.idea
+coverage
+*.log
+.DS_Store
+.vscode
+.scannerwork
+.qodo
