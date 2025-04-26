@@ -1,15 +1,26 @@
-import React, { useState } from "react";
-import { useMutation } from "@tanstack/react-query";
+import React, { useEffect, useState } from "react";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-import { Table, Input, Tooltip, Button, Popconfirm, message } from "antd";
+import { Table, Input, Tooltip, Button, Popconfirm, message, Spin } from "antd";
 import { DeleteOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import "./Features.css";
-import { postRequirements } from "../../services/updateDataService";
+import {
+  fetchRequirements,
+  postRequirements,
+} from "../../services/updateDataService";
 
 const Features = () => {
   const navigate = useNavigate();
   const [editingCell, setEditingCell] = useState({ row: null, field: null });
 
+  // 1️⃣ Fetch Data using useQuery
+  const { data, isLoading: isFetching } = useQuery({
+    queryKey: ["requirements"],
+    queryFn: fetchRequirements,
+    staleTime: 0,
+  });
+
+  // 2️⃣ Define initial 7 empty rows
   const initialData = Array.from({ length: 7 }, (_, index) => ({
     key: index.toString(),
     moduleName: "",
@@ -19,8 +30,39 @@ const Features = () => {
     threshold1: { min: "", max: "" },
     threshold2: { min: "", max: "" },
   }));
+
+  // 3️⃣ Filter valid fetched data
+  const validFetchedData = (data || [])
+    .filter((item) => item.moduleName && item.featureName)
+    .map((item, index) => ({
+      key: index.toString(),
+      moduleName: item.moduleName,
+      featureName: item.featureName,
+      assumptions: item.assumptions || "",
+      additionalComments: item.comments || "",
+      threshold1: {
+        min: item.minEstimatesHours ? item.minEstimatesHours.toString() : "",
+        max: item.maxEstimatesHours ? item.maxEstimatesHours.toString() : "",
+      },
+      threshold2: {
+        min: item.minEstimatesDays ? item.minEstimatesDays.toString() : "",
+        max: item.maxEstimatesDays ? item.maxEstimatesDays.toString() : "",
+      },
+    }));
+
+  // 4️⃣ Initialize state
   const [dataSource, setDataSource] = useState(initialData);
 
+  // 5️⃣ Update state when data fetched
+  useEffect(() => {
+    if (validFetchedData.length > 0) {
+      setDataSource(validFetchedData);
+    } else if (!isFetching) {
+      setDataSource(initialData);
+    }
+  }, [data, isFetching]);
+
+  // 6️⃣ Handle cell editing
   const handleCellChange = (rowIndex, dataIndex, value, parentKey = null) => {
     const updatedData = [...dataSource];
     if (parentKey) {
@@ -31,6 +73,7 @@ const Features = () => {
     setDataSource(updatedData);
   };
 
+  // 7️⃣ Setup mutation for update
   const { mutate: submitRequirements, isLoading } = useMutation({
     mutationFn: postRequirements,
     onSuccess: () => {
@@ -41,12 +84,13 @@ const Features = () => {
     },
   });
 
+  // 8️⃣ Validation
   const isAnyFieldEmpty = dataSource.some((item) => {
     return (
-      !item.moduleName.trim() ||
-      !item.featureName.trim() ||
-      !item.threshold1.min.trim() ||
-      !item.threshold1.max.trim()
+      !`${item.moduleName}`.trim() ||
+      !`${item.featureName}`.trim() ||
+      !`${item.threshold1.min}`.trim() ||
+      !`${item.threshold1.max}`.trim()
     );
   });
 
@@ -58,15 +102,17 @@ const Features = () => {
 
     const invalidRow = dataSource.find((item) => {
       return (
-        !item.moduleName.trim() ||
-        !item.featureName.trim() ||
-        !item.threshold1.min.trim() ||
-        !item.threshold1.max.trim()
+        !`${item.tableName}`.trim() ||
+        !`${item.moduleName}`.trim() ||
+        !`${item.featureName}`.trim() ||
+        !`${item.assumptions}`.trim() ||
+        !`${item.comments}`.trim() ||
+        !`${item.threshold1.min}`.trim() ||
+        !`${item.threshold1.max}`.trim()
       );
     });
 
     if (invalidRow) {
-      console.log("Validation Failed: Missing required fields", invalidRow); // Debug log
       message.error(
         "Please add required fields data or delete rows which are not required."
       );
@@ -85,9 +131,12 @@ const Features = () => {
       minEstimatesDays: (parseFloat(item.threshold1.min) / 8).toFixed(2),
     }));
 
+    console.log("aa", payload);
+
     submitRequirements(payload);
   };
 
+  // 9️⃣ Add & Delete row handlers
   const handleAddRow = () => {
     const newRow = {
       key: Date.now().toString(),
@@ -101,8 +150,6 @@ const Features = () => {
     setDataSource([...dataSource, newRow]);
   };
 
-  const isDeleteDisabled = dataSource.length === 0;
-
   const handleDeleteLastRow = () => {
     const updatedData = [...dataSource];
     updatedData.pop();
@@ -110,7 +157,11 @@ const Features = () => {
     message.success("Last row deleted.");
   };
 
+  const isDeleteDisabled = dataSource.length === 0;
+
+  // 🔟 Render editable cell
   const renderEditableCell = (rowIndex, field, value, parentKey = null) => {
+    console.log("aa", value);
     const cellKey = `${parentKey || ""}_${field}`;
     const isEditing =
       editingCell.row === rowIndex && editingCell.field === cellKey;
@@ -137,6 +188,7 @@ const Features = () => {
     );
   };
 
+  // Table Columns
   const columns = [
     {
       title: "Module Name",
@@ -198,16 +250,14 @@ const Features = () => {
           title: "Min",
           render: (_, record) => {
             const minHrs = parseFloat(record.threshold1.min);
-            const minDays = !isNaN(minHrs) ? (minHrs / 8).toFixed(2) : "";
-            return <span>{minDays}</span>;
+            return !isNaN(minHrs) ? (minHrs / 8).toFixed(2) : "";
           },
         },
         {
           title: "Max",
           render: (_, record) => {
             const maxHrs = parseFloat(record.threshold1.max);
-            const maxDays = !isNaN(maxHrs) ? (maxHrs / 8).toFixed(2) : "";
-            return <span>{maxDays}</span>;
+            return !isNaN(maxHrs) ? (maxHrs / 8).toFixed(2) : "";
           },
         },
       ],
@@ -221,54 +271,55 @@ const Features = () => {
         Code Review + Integration + Code merge)
       </h2>
 
-      <Table
-        dataSource={dataSource}
-        columns={columns}
-        bordered
-        pagination={false}
-      />
+      {isFetching ? (
+        <Spin tip="Loading data..." />
+      ) : (
+        <>
+          <Table
+            dataSource={dataSource}
+            columns={columns}
+            bordered
+            pagination={false}
+          />
 
-      <div className="table-toolbar">
-        <Tooltip title="Add a row">
-          <PlusCircleOutlined className="icon" onClick={handleAddRow} />
-        </Tooltip>
+          <div className="table-toolbar">
+            <Tooltip title="Add a row">
+              <PlusCircleOutlined className="icon" onClick={handleAddRow} />
+            </Tooltip>
+            <Popconfirm
+              title="Are you sure you want to delete the last row?"
+              onConfirm={handleDeleteLastRow}
+              okText="Yes"
+              cancelText="No"
+              disabled={isDeleteDisabled}
+            >
+              <Tooltip
+                title={
+                  isDeleteDisabled ? "No rows to delete" : "Delete last row"
+                }
+              >
+                <DeleteOutlined className="icon delete-icon" />
+              </Tooltip>
+            </Popconfirm>
+          </div>
 
-        <Popconfirm
-          title="Are you sure you want to delete the last row?"
-          onConfirm={handleDeleteLastRow}
-          okText="Yes"
-          cancelText="No"
-          disabled={isDeleteDisabled}
-        >
-          <Tooltip
-            title={isDeleteDisabled ? "No rows to delete" : "Delete last row"}
-          >
-            <DeleteOutlined
-              className="icon delete-icon"
-              style={{
-                cursor: isDeleteDisabled ? "not-allowed" : "pointer",
-                opacity: isDeleteDisabled ? 0.5 : 1,
-              }}
-            />
-          </Tooltip>
-        </Popconfirm>
-      </div>
-
-      <div className="button-group">
-        <Tooltip title={isAnyFieldEmpty ? "Fields cannot be empty" : ""}>
-          <Button
-            type="primary"
-            onClick={handleUpdate}
-            loading={isLoading}
-            disabled={isAnyFieldEmpty}
-          >
-            Update
-          </Button>
-        </Tooltip>
-        <Button className="next-button" onClick={() => navigate("/test")}>
-          Next
-        </Button>
-      </div>
+          <div className="button-group">
+            <Tooltip title={isAnyFieldEmpty ? "Fields cannot be empty" : ""}>
+              <Button
+                type="primary"
+                onClick={handleUpdate}
+                loading={isLoading}
+                disabled={isAnyFieldEmpty}
+              >
+                Update
+              </Button>
+            </Tooltip>
+            <Button className="next-button" onClick={() => navigate("/test")}>
+              Next
+            </Button>
+          </div>
+        </>
+      )}
     </div>
   );
 };

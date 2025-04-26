@@ -7,3 +7,8 @@ export const postRequirements = async (requirements) => {
   );
   return response.data;
 };
+
+export const fetchRequirements = async () => {
+  const response = await axios.get("http://localhost:8082/getRequirements");
+  return response.data;
+};
