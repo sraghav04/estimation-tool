@@ -35,8 +35,8 @@ mongoose
 
 // Optional: Define a schema and model
 const requirementSchema = new mongoose.Schema({
-  modeuleName: String,
-  faetureName: String,
+  moduleName: String,
+  featureName: String,
   assumptions: String,
   maxEstimatesHours: Number,
   minEstimatesHours: Number,
