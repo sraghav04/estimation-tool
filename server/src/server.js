@@ -53,37 +53,48 @@ const requirementSchema = new mongoose.Schema({
 const Test = mongoose.model('Requirements', requirementSchema);
 
 app.post('/requirements', async (req, res) => {
-  const {
-    tableName,
-    moduleName,
-    featureName,
-    assumptions,
-    comments,
-    maxEstimatesHours,
-    minEstimatesHours,
-    maxEstimatesDays,
-    minEstimatesDays,
-  } = req.body;
-  console.log('Received data:', req.body);
-  if (!moduleName || !featureName) {
-    return res.status(400).json({ error: 'Module name and feature name are required' });
+  const requirements = req.body;
+
+  if (!Array.isArray(requirements) || requirements.length === 0) {
+    return res.status(400).json({ error: 'An array of requirements is required' });
   }
 
   try {
-    const newRequirement = new Test({
-      tableName,
-      moduleName,
-      featureName,
-      assumptions,
-      comments,
-      maxEstimatesHours,
-      minEstimatesHours,
-      maxEstimatesDays,
-      minEstimatesDays,
-    });
+    const savedRequirements = await Promise.all(
+      requirements.map(async requirement => {
+        const {
+          tableName,
+          moduleName,
+          featureName,
+          assumptions,
+          comments,
+          maxEstimatesHours,
+          minEstimatesHours,
+          maxEstimatesDays,
+          minEstimatesDays,
+        } = requirement;
 
-    const savedRequirement = await newRequirement.save();
-    res.status(201).json(savedRequirement);
+        if (!moduleName || !featureName) {
+          throw new Error('Module name and feature name are required');
+        }
+
+        const newRequirement = new Test({
+          tableName,
+          moduleName,
+          featureName,
+          assumptions,
+          comments,
+          maxEstimatesHours,
+          minEstimatesHours,
+          maxEstimatesDays,
+          minEstimatesDays,
+        });
+
+        return await newRequirement.save();
+      }),
+    );
+
+    res.status(201).json(savedRequirements);
   } catch (error) {
     console.error('Error inserting data:', error);
     res.status(500).json({ error: 'Failed to insert data into MongoDB' });
