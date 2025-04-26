@@ -35,9 +35,11 @@ mongoose
 
 // Optional: Define a schema and model
 const requirementSchema = new mongoose.Schema({
+  tableName: String,
   modeuleName: String,
   faetureName: String,
   assumptions: String,
+  comments: String,
   maxEstimatesHours: Number,
   minEstimatesHours: Number,
   maxEstimatesDays: Number,
@@ -52,9 +54,11 @@ const Test = mongoose.model('Requirements', requirementSchema);
 
 app.post('/requirements', async (req, res) => {
   const {
+    tableName,
     moduleName,
     featureName,
     assumptions,
+    comments,
     maxEstimatesHours,
     minEstimatesHours,
     maxEstimatesDays,
@@ -67,9 +71,11 @@ app.post('/requirements', async (req, res) => {
 
   try {
     const newRequirement = new Test({
+      tableName,
       moduleName,
       featureName,
       assumptions,
+      comments,
       maxEstimatesHours,
       minEstimatesHours,
       maxEstimatesDays,
