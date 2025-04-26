@@ -30,7 +30,8 @@ function Chat() {
       });
       const replyMessage = { type: "bot", text: res.data.reply };
       setChat((prev) => [...prev, replyMessage]);
-    } catch (err) {
+    } catch (error) {
+      console.log(error);
       setChat((prev) => [
         ...prev,
         { type: "bot", text: "Error fetching response." },

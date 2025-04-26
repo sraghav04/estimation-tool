@@ -51,12 +51,41 @@ const requirementSchema = new mongoose.Schema({
 });
 
 const Test = mongoose.model('Requirements', requirementSchema);
+const calculateSumOfEstimates = data => {
+  let totalMaxDays = 0;
+  let totalMinDays = 0;
+
+  data.forEach(item => {
+    totalMaxDays += item.maxEstimatesDays;
+    totalMinDays += item.minEstimatesDays;
+  });
+
+  return {
+    totalMaxDays,
+    totalMinDays,
+  };
+};
 
 // GET endpoint to fetch all requirements
 app.get('/getRequirements', async (req, res) => {
   try {
-    const response = await Test.find();
+    // const response = await Test.find();
+    const columnValue = req.query.columnValue;
+    const response = await Test.find({ tableName: columnValue });
     res.status(200).json(response);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+app.get('/getRequirementsTotal', async (req, res) => {
+  try {
+    // const response = await Test.find();
+    const columnValue = req.query.columnValue;
+    const response = await Test.find({ tableName: columnValue });
+    const result = calculateSumOfEstimates(response);
+
+    res.status(200).json(result);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
