@@ -21,6 +21,7 @@ const Homepage = () => {
     { key: "/test", label: "Test Engineering" },
     { key: "/require", label: "Requirement Gathering" },
     { key: "/dev", label: "Additional Development" },
+    { key: "/Summary", label: "Summary" },
   ];
 
   const activeKey =
@@ -41,8 +42,7 @@ const Homepage = () => {
           marginLeft: isSidebarOpen ? 300 : 0,
           padding: 20,
           transition: "margin-left 0.3s ease",
-        }}
-      >
+        }}>
         {/* Tabs Below Header */}
         <Tabs activeKey={activeKey} onChange={onTabChange}>
           {tabItems.map((tab) => (
