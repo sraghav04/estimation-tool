@@ -13,14 +13,14 @@ const Features = () => {
   const navigate = useNavigate();
   const [editingCell, setEditingCell] = useState({ row: null, field: null });
 
-  // 1️⃣ Fetch Data using useQuery
+  // Fetch Data using useQuery
   const { data, isLoading: isFetching } = useQuery({
     queryKey: ["requirements"],
     queryFn: fetchRequirements,
     staleTime: 0,
   });
 
-  // 2️⃣ Define initial 7 empty rows
+  // Define initial 7 empty rows
   const initialData = Array.from({ length: 7 }, (_, index) => ({
     key: index.toString(),
     moduleName: "",
@@ -31,29 +31,37 @@ const Features = () => {
     threshold2: { min: "", max: "" },
   }));
 
-  // 3️⃣ Filter valid fetched data
+  // Filter valid fetched data based on ALL required fields
   const validFetchedData = (data || [])
-    .filter((item) => item.moduleName && item.featureName)
+    .filter(
+      (item) =>
+        item.tableName &&
+        item.moduleName &&
+        item.assumptions &&
+        item.comments &&
+        item.maxEstimatesHours !== undefined &&
+        item.minEstimatesHours !== undefined &&
+        item.maxEstimatesDays !== undefined &&
+        item.minEstimatesDays !== undefined
+    )
     .map((item, index) => ({
       key: index.toString(),
       moduleName: item.moduleName,
-      featureName: item.featureName,
+      featureName: item.featureName || "",
       assumptions: item.assumptions || "",
       additionalComments: item.comments || "",
       threshold1: {
-        min: item.minEstimatesHours ? item.minEstimatesHours.toString() : "",
-        max: item.maxEstimatesHours ? item.maxEstimatesHours.toString() : "",
+        min: item.minEstimatesHours.toString(),
+        max: item.maxEstimatesHours.toString(),
       },
       threshold2: {
-        min: item.minEstimatesDays ? item.minEstimatesDays.toString() : "",
-        max: item.maxEstimatesDays ? item.maxEstimatesDays.toString() : "",
+        min: item.minEstimatesDays.toString(),
+        max: item.maxEstimatesDays.toString(),
       },
     }));
 
-  // 4️⃣ Initialize state
   const [dataSource, setDataSource] = useState(initialData);
 
-  // 5️⃣ Update state when data fetched
   useEffect(() => {
     if (validFetchedData.length > 0) {
       setDataSource(validFetchedData);
@@ -62,7 +70,7 @@ const Features = () => {
     }
   }, [data, isFetching]);
 
-  // 6️⃣ Handle cell editing
+  // Handle cell editing
   const handleCellChange = (rowIndex, dataIndex, value, parentKey = null) => {
     const updatedData = [...dataSource];
     if (parentKey) {
@@ -73,7 +81,7 @@ const Features = () => {
     setDataSource(updatedData);
   };
 
-  // 7️⃣ Setup mutation for update
+  // Mutation for update
   const { mutate: submitRequirements, isLoading } = useMutation({
     mutationFn: postRequirements,
     onSuccess: () => {
@@ -84,11 +92,12 @@ const Features = () => {
     },
   });
 
-  // 8️⃣ Validation
+  // Validation before enabling Update button
   const isAnyFieldEmpty = dataSource.some((item) => {
     return (
       !`${item.moduleName}`.trim() ||
-      !`${item.featureName}`.trim() ||
+      !`${item.assumptions}`.trim() ||
+      !`${item.additionalComments}`.trim() ||
       !`${item.threshold1.min}`.trim() ||
       !`${item.threshold1.max}`.trim()
     );
@@ -102,11 +111,9 @@ const Features = () => {
 
     const invalidRow = dataSource.find((item) => {
       return (
-        !`${item.tableName}`.trim() ||
         !`${item.moduleName}`.trim() ||
-        !`${item.featureName}`.trim() ||
         !`${item.assumptions}`.trim() ||
-        !`${item.comments}`.trim() ||
+        !`${item.additionalComments}`.trim() ||
         !`${item.threshold1.min}`.trim() ||
         !`${item.threshold1.max}`.trim()
       );
@@ -131,12 +138,10 @@ const Features = () => {
       minEstimatesDays: (parseFloat(item.threshold1.min) / 8).toFixed(2),
     }));
 
-    console.log("aa", payload);
-
     submitRequirements(payload);
   };
 
-  // 9️⃣ Add & Delete row handlers
+  // Add & Delete Row
   const handleAddRow = () => {
     const newRow = {
       key: Date.now().toString(),
@@ -159,9 +164,8 @@ const Features = () => {
 
   const isDeleteDisabled = dataSource.length === 0;
 
-  // 🔟 Render editable cell
+  // Render editable cells
   const renderEditableCell = (rowIndex, field, value, parentKey = null) => {
-    console.log("aa", value);
     const cellKey = `${parentKey || ""}_${field}`;
     const isEditing =
       editingCell.row === rowIndex && editingCell.field === cellKey;

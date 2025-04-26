@@ -37,7 +37,7 @@ mongoose
 const requirementSchema = new mongoose.Schema({
   tableName: String,
   moduleName: String,
-  faetureName: String,
+  featureName: String,
   assumptions: String,
   comments: String,
   maxEstimatesHours: Number,
