@@ -1,0 +1,82 @@
+/* Highlight edited cells */
+.edited-cell {
+  background-color: #e6f7ff;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+
+/* Dark grey headers */
+.ant-table-thead > tr > th {
+  background-color: #bfbfbf !important;
+  color: #000;
+  font-weight: 600;
+  padding-top: 4px !important;
+  padding-bottom: 4px !important;
+  line-height: 16px !important;
+  height: 30px; /* Control overall height */
+}
+
+/* Button Group Styling */
+.button-group {
+  margin-top: 20px;
+  display: flex;
+  gap: 15px;
+  justify-content: flex-end;
+}
+
+.next-button {
+  background-color: white;
+  color: black;
+  border: 1px solid black;
+}
+
+.next-button:hover {
+  background-color: #d4edda;
+  border-color: #28a745;
+  color: black;
+}
+
+.table-wrapper {
+  position: relative;
+}
+
+.add-row-icon {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  font-size: 24px;
+  color: #1890ff;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.table-wrapper:hover .add-row-icon {
+  opacity: 1;
+}
+
+.table-toolbar {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.icon {
+  font-size: 24px;
+  color: #1890ff;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.icon:hover {
+  color: #40a9ff;
+}
+
+.delete-icon {
+  color: #ff4d4f;
+}
+
+.delete-icon:hover {
+  color: #ff7875;
+}
