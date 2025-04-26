@@ -36,7 +36,7 @@ mongoose
 // Optional: Define a schema and model
 const requirementSchema = new mongoose.Schema({
   tableName: String,
-  modeuleName: String,
+  moduleName: String,
   faetureName: String,
   assumptions: String,
   comments: String,

@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { Table, Input, Tooltip, Button, Popconfirm, message } from "antd";
 import { DeleteOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import "./Features.css";
+import { postRequirements } from "../../services/updateDataService";
 
 const Features = () => {
   const navigate = useNavigate();
@@ -27,6 +29,63 @@ const Features = () => {
       updatedData[rowIndex][dataIndex] = value;
     }
     setDataSource(updatedData);
+  };
+
+  const { mutate: submitRequirements, isLoading } = useMutation({
+    mutationFn: postRequirements,
+    onSuccess: () => {
+      message.success("Requirements saved successfully!");
+    },
+    onError: () => {
+      message.error("Failed to save requirements. Please try again.");
+    },
+  });
+
+  const isAnyFieldEmpty = dataSource.some((item) => {
+    return (
+      !item.moduleName.trim() ||
+      !item.featureName.trim() ||
+      !item.threshold1.min.trim() ||
+      !item.threshold1.max.trim()
+    );
+  });
+
+  const handleUpdate = () => {
+    if (dataSource.length === 0) {
+      message.warning("No data to submit!");
+      return;
+    }
+
+    const invalidRow = dataSource.find((item) => {
+      return (
+        !item.moduleName.trim() ||
+        !item.featureName.trim() ||
+        !item.threshold1.min.trim() ||
+        !item.threshold1.max.trim()
+      );
+    });
+
+    if (invalidRow) {
+      console.log("Validation Failed: Missing required fields", invalidRow); // Debug log
+      message.error(
+        "Please add required fields data or delete rows which are not required."
+      );
+      return;
+    }
+
+    const payload = dataSource.map((item) => ({
+      tableName: "FeaturesTable",
+      moduleName: item.moduleName.trim(),
+      featureName: item.featureName.trim(),
+      assumptions: item.assumptions.trim(),
+      comments: item.additionalComments.trim(),
+      maxEstimatesHours: item.threshold1.max.trim(),
+      minEstimatesHours: item.threshold1.min.trim(),
+      maxEstimatesDays: (parseFloat(item.threshold1.max) / 8).toFixed(2),
+      minEstimatesDays: (parseFloat(item.threshold1.min) / 8).toFixed(2),
+    }));
+
+    submitRequirements(payload);
   };
 
   const handleAddRow = () => {
@@ -196,7 +255,16 @@ const Features = () => {
       </div>
 
       <div className="button-group">
-        <Button type="primary">Update</Button>
+        <Tooltip title={isAnyFieldEmpty ? "Fields cannot be empty" : ""}>
+          <Button
+            type="primary"
+            onClick={handleUpdate}
+            loading={isLoading}
+            disabled={isAnyFieldEmpty}
+          >
+            Update
+          </Button>
+        </Tooltip>
         <Button className="next-button" onClick={() => navigate("/test")}>
           Next
         </Button>
