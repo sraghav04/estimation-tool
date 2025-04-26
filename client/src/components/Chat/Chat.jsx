@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import "./Chat.css";
-
+import ChatResponseTable from "../Table/Table.jsx";
 function Chat() {
   const [input, setInput] = useState("");
   const [chat, setChat] = useState([]);

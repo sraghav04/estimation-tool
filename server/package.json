@@ -30,6 +30,8 @@
     "jwt-decode": "^3.1.2",
     "lodash": "^4.17.21",
     "mammoth": "^1.9.0",
+    "mongodb": "^6.16.0",
+    "mongoose": "^8.14.0",
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.2",
     "nodemailer": "^6.9.5",

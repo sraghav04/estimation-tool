@@ -4,6 +4,7 @@ const cors = require('cors');
 const express = require('express');
 const dotenv = require('dotenv');
 // const { OpenAIApi } = require('openai');
+const mongoose = require('mongoose');
 
 const { router } = require('./routes');
 const { httpLogger, errorHandler } = require('./middleware');
@@ -20,13 +21,72 @@ app.use('/api/ms-trigger', router);
 const axios = require('axios');
 dotenv.config();
 
-// const openai = new OpenAIApi({
-//   apiKey: process.env.OPENAI_API_KEY,
-// });
+// Replace with your actual connection string and DB name
+const uri =
+  'mongodb+srv://raghavsingh0419:yBpRFupetI28o4It@estimatetool.ojugytx.mongodb.net/?retryWrites=true&w=majority&appName=EstimateTool';
+
+mongoose
+  .connect(uri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log('✅ Connected to MongoDB Atlas via Mongoose'))
+  .catch(err => console.error('❌ MongoDB connection error:', err));
+
+// Optional: Define a schema and model
+const requirementSchema = new mongoose.Schema({
+  modeuleName: String,
+  faetureName: String,
+  assumptions: String,
+  maxEstimatesHours: Number,
+  minEstimatesHours: Number,
+  maxEstimatesDays: Number,
+  minEstimatesDays: Number,
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+});
+
+const Test = mongoose.model('Requirements', requirementSchema);
+
+app.post('/requirements', async (req, res) => {
+  const {
+    moduleName,
+    featureName,
+    assumptions,
+    maxEstimatesHours,
+    minEstimatesHours,
+    maxEstimatesDays,
+    minEstimatesDays,
+  } = req.body;
+  console.log('Received data:', req.body);
+  if (!moduleName || !featureName) {
+    return res.status(400).json({ error: 'Module name and feature name are required' });
+  }
+
+  try {
+    const newRequirement = new Test({
+      moduleName,
+      featureName,
+      assumptions,
+      maxEstimatesHours,
+      minEstimatesHours,
+      maxEstimatesDays,
+      minEstimatesDays,
+    });
+
+    const savedRequirement = await newRequirement.save();
+    res.status(201).json(savedRequirement);
+  } catch (error) {
+    console.error('Error inserting data:', error);
+    res.status(500).json({ error: 'Failed to insert data into MongoDB' });
+  }
+});
 
 app.post('/chat', async (req, res) => {
   const { message } = req.body;
-
+  // createRequirementDoc();
   if (!message) {
     return res.status(400).json({ error: 'Message is required' });
   }
