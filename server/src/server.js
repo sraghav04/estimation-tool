@@ -52,6 +52,16 @@ const requirementSchema = new mongoose.Schema({
 
 const Test = mongoose.model('Requirements', requirementSchema);
 
+// GET endpoint to fetch all requirements
+app.get('/getRequirements', async (req, res) => {
+  try {
+    const response = await Test.find();
+    res.status(200).json(response);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 app.post('/requirements', async (req, res) => {
   const requirements = req.body;
 
