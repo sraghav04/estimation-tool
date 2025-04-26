@@ -38,9 +38,8 @@ const Homepage = () => {
       <div
         className="main-content"
         style={{
-          marginLeft: isSidebarOpen ? 200 : 0,
-
-          padding: 10,
+          marginLeft: isSidebarOpen ? 300 : 0,
+          padding: 20,
           transition: "margin-left 0.3s ease",
         }}
       >
